@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Control LED</title>
+</head>
+<body>
+  <button id="ledButton">Turn On LED</button>
+  <button id="offButton">Turn Off LED</button>
+
+  <script>
+    // JavaScript code to handle button click
+    document.getElementById("ledButton").addEventListener("click", function() {
+      fetch('/button/led') // Sending a GET request to the server with action 'led'
+        .then(response => response.text())
+        .then(data => alert(data)); // Displaying the response from the server in an alert
+    });
+
+    document.getElementById("offButton").addEventListener("click", function() {
+      fetch('/button/off') // Sending a GET request to the server with action 'off'
+        .then(response => response.text())
+        .then(data => alert(data)); // Displaying the response from the server in an alert
+    });
+  </script>
+</body>
+</html>
