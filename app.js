@@ -1,5 +1,17 @@
 const express = require('express');
 const app = express();
+const path = require('path');
+const https = require('https');
+const fs = require('fs');
+
+const httpsOptions = {
+  key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'cert.pem')),
+  passphrase: '1234'  // The passphrase you set when generating the certificate
+};
+
+// Serve static files from the root folder
+app.use(express.static(path.join(__dirname, '/')));
 
 var port = 3000;
 
@@ -41,6 +53,6 @@ app.get('/:action', function (req, res) {
  
 });
 
-app.listen(port, function () {
-  console.log('Example app listening on port http://0.0.0.0:' + port + '!');
+https.createServer(httpsOptions, app).listen(port, function () {
+  console.log('Example app listening on port https://0.0.0.0:' + port + '!');
 });
