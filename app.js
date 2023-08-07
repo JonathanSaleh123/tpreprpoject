@@ -1,17 +1,7 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
-const path = require('path');
-const https = require('https');
-const fs = require('fs');
-
-const httpsOptions = {
-  key: fs.readFileSync(path.join(__dirname, 'key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'cert.pem')),
-  passphrase: '1234'  // The passphrase you set when generating the certificate
-};
-
-// Serve static files from the root folder
-app.use(express.static(path.join(__dirname, '/')));
+app.use(cors());
 
 var port = 3000;
 
@@ -39,20 +29,24 @@ app.get('/:action', function (req, res) {
     
    var action = req.params.action || req.param('action');
     
-    if(action == 'led'){
-        arduinoSerialPort.write("w");
-        return res.send('Led light is on!');
+    if(action == 'grey'){
+        arduinoSerialPort.write("g");
+        return res.send('Grey Led light is on!');
     } 
-    if(action == 'off') {
-        arduinoSerialPort.write("t");
-        return res.send("Led light is off!");
+    if(action == 'green') {
+        arduinoSerialPort.write("w");
+        return res.send("Green Led light is on!");
+    }
+    if(action == 'blue') {
+        arduinoSerialPort.write("b");
+        return res.send("Blue Led light is on!");
     }
 
-    
+    arduinoSerialPort.write("a");
     return res.send('Action: ' + action);
  
 });
 
-https.createServer(httpsOptions, app).listen(port, function () {
-  console.log('Example app listening on port https://0.0.0.0:' + port + '!');
+app.listen(port, function () {
+  console.log('Example app listening on port http://0.0.0.0:' + port + '!');
 });
